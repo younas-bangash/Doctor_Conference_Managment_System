@@ -1,4 +1,4 @@
-package com.doctorconference.managment;
+package com.doctorconference.managment.topictab;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -7,6 +7,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.doctorconference.managment.DatabaseHandler;
+import com.doctorconference.managment.GetSetData;
+import com.doctorconference.managment.R;
+import com.doctorconference.managment.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +27,7 @@ public class TopicsRecordFragment extends Fragment {
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
 
-    private List<GetSetData> mUserDetails=new ArrayList<>();
+    private List<GetSetData> mAdminTopics=new ArrayList<>();
     private OnListFragmentInteractionListener mListener;
 
     /**
@@ -56,14 +61,14 @@ public class TopicsRecordFragment extends Fragment {
             Utils.db = new DatabaseHandler(context);
             RecyclerView recyclerView = (RecyclerView) view;
 
-            GetDoctorRecord();
-            recyclerView.setAdapter(new TopicRViewAdapter(mUserDetails, mListener));
+            GetTopics();
+            recyclerView.setAdapter(new TopicRViewAdapter(mAdminTopics, mListener));
         }
         return view;
     }
 
-    private void GetDoctorRecord() {
-        mUserDetails=Utils.db.checkUserDetails("","",true);
+    private void GetTopics() {
+        mAdminTopics=Utils.db.GetTopics("",true);
     }
     @Override
     public void onAttach(Context context) {

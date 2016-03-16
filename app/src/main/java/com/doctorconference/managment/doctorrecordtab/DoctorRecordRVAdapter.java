@@ -1,10 +1,14 @@
-package com.doctorconference.managment;
+package com.doctorconference.managment.doctorrecordtab;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.doctorconference.managment.GetSetData;
+import com.doctorconference.managment.R;
+
 import java.util.List;
 
 /**
@@ -12,27 +16,28 @@ import java.util.List;
  * specified {@link }.
  * TODO: Replace the implementation with code for your data type.
  */
-public class TopicRViewAdapter extends RecyclerView.Adapter<TopicRViewAdapter.ViewHolder> {
+public class DoctorRecordRVAdapter extends RecyclerView.Adapter<DoctorRecordRVAdapter.ViewHolder> {
 
     private final List<GetSetData> mValues;
-    private final TopicsRecordFragment.OnListFragmentInteractionListener mListener;
+    private final DoctorRecordFragment.OnListFragmentInteractionListener mListener;
 
-    public TopicRViewAdapter(List<GetSetData> items, TopicsRecordFragment.OnListFragmentInteractionListener listener) {
+    public DoctorRecordRVAdapter(List<GetSetData> items, DoctorRecordFragment.OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.fragment_item, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mContentView.setText(String.format("%s %s", mValues.get(position).getmFirstName(),
-                mValues.get(position).getmLastName()));
+        holder.mIdView.setText(mValues.get(position).getmEmail());
+        holder.mContentView.setText(String.format("%s %s", mValues.get(position).getmFirstName(), mValues.get(position).getmLastName()));
         holder.mView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
@@ -44,6 +49,7 @@ public class TopicRViewAdapter extends RecyclerView.Adapter<TopicRViewAdapter.Vi
                 return true;
             }
         });
+
     }
 
     @Override
@@ -53,12 +59,14 @@ public class TopicRViewAdapter extends RecyclerView.Adapter<TopicRViewAdapter.Vi
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
+        public final TextView mIdView;
         public final TextView mContentView;
         public GetSetData mItem;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
+            mIdView = (TextView) view.findViewById(R.id.details);
             mContentView = (TextView) view.findViewById(R.id.content);
         }
 

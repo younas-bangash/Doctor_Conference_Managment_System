@@ -1,4 +1,4 @@
-package com.doctorconference.managment;
+package com.doctorconference.managment.doctorrecordtab;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -10,6 +10,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.doctorconference.managment.DatabaseHandler;
+import com.doctorconference.managment.GetSetData;
+import com.doctorconference.managment.R;
+import com.doctorconference.managment.Utils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A fragment representing a list of Items.
@@ -17,25 +24,26 @@ import android.view.ViewGroup;
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
-public class ConferencFragment extends Fragment {
+public class DoctorRecordFragment extends Fragment {
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
+    private List<GetSetData> mDoctoreRecord=new ArrayList<>();
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public ConferencFragment() {
+    public DoctorRecordFragment() {
     }
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
-    public static ConferencFragment newInstance(int columnCount) {
-        ConferencFragment fragment = new ConferencFragment();
+    public static DoctorRecordFragment newInstance(int columnCount) {
+        DoctorRecordFragment fragment = new DoctorRecordFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
         fragment.setArguments(args);
@@ -54,7 +62,7 @@ public class ConferencFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_item_list_conference, container, false);
+        View view = inflater.inflate(R.layout.fragment_item_list2, container, false);
 
         // Set the adapter
         if (view instanceof RecyclerView) {
@@ -65,9 +73,19 @@ public class ConferencFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-           // recyclerView.setAdapter(new ConferenceRVAdapter(DummyContent.ITEMS, mListener));
+
+            GetDoctorRecord();
+
+
+            recyclerView.setAdapter(new DoctorRecordRVAdapter(mDoctoreRecord, mListener));
         }
         return view;
+    }
+
+    private void GetDoctorRecord() {
+        Utils.db = new DatabaseHandler(getActivity());
+        mDoctoreRecord = Utils.db.checkUserDetails("", "", true);//fetch all doctore record
+
     }
 
 

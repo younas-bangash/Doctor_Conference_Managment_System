@@ -46,6 +46,8 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login2);
+        Utils.db = new DatabaseHandler(this);
+        //InsetSomeRecord();
         Utils.sharedpreferences = getSharedPreferences(Utils.MyPREFERENCES, Context.MODE_PRIVATE);
         boolean isLogin= Utils.sharedpreferences.getBoolean("Login",false);
         if(isLogin){
@@ -57,7 +59,6 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(dasboard);
             finish();
         }else {
-            Utils.db = new DatabaseHandler(this);
             //InsetSomeRecord();
             mEmailView = (EditText) findViewById(R.id.email);
             mPasswordView = (EditText) findViewById(R.id.password);

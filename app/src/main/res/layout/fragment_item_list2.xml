@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/list"
-    android:name="com.doctorconference.managment.ConferencFragment"
+    android:name="com.doctorconference.managment.doctorrecordtab.DoctorRecordFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layoutManager="LinearLayoutManager"
-    tools:context=".conferencetab.ConferencFragment"
-    tools:listitem="@layout/fragment_item2" />
+    tools:context="com.doctorconference.managment.doctorrecordtab.DoctorRecordFragment"
+    tools:listitem="@layout/fragment_item3" />

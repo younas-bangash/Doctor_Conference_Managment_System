@@ -1,8 +1,8 @@
 package com.doctorconference.managment;
 
+import android.app.Dialog;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -17,10 +17,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class MainDashboard extends AppCompatActivity implements TopicsRecordFragment.OnListFragmentInteractionListener {
+import com.doctorconference.managment.doctorrecordtab.DoctorRecordFragment;
+import com.doctorconference.managment.topictab.TopicsRecordFragment;
+
+public class MainDashboard extends AppCompatActivity implements
+        TopicsRecordFragment.OnListFragmentInteractionListener,
+        DoctorRecordFragment.OnListFragmentInteractionListener{
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -31,6 +39,7 @@ public class MainDashboard extends AppCompatActivity implements TopicsRecordFrag
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
     private SectionsPagerAdapter mSectionsPagerAdapter;
+    public static  FloatingActionButton fab;
 
     /**
      * The {@link ViewPager} that will host the section contents.
@@ -54,18 +63,85 @@ public class MainDashboard extends AppCompatActivity implements TopicsRecordFrag
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
+            @Override
+            public void onPageSelected(int position) {
+                if(position==2 || position==1 )
+                    fab.setVisibility(View.GONE);
+                else
+                    fab.setVisibility(View.VISIBLE);
+            }
+            @Override
+            public void onPageScrollStateChanged(int state) {
+            }
+        });
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        Utils.db = new DatabaseHandler(this);
+//        Utils.db.addTopics(new GetSetData("","Topic1 Tittle","TopicDetails"));
+//        Utils.db.addTopics(new GetSetData("","Topic2 Tittle","TopicDetails"));
+//        Utils.db.addTopics(new GetSetData("","Topic3 Tittle","TopicDetails"));
+//        Utils.db.addTopics(new GetSetData("","Topic4 Tittle","TopicDetails"));
+//        Utils.db.addTopics(new GetSetData("","Topic5 Tittle","TopicDetails"));
+//        Utils.db.addTopics(new GetSetData("","Topic6 Tittle","TopicDetails"));
+
+        fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                switch (mViewPager.getCurrentItem()){
+                    case 0:
+                        ShowDetails();
+                        break;
+                }
             }
         });
 
     }
+    public void ShowDetails() {
+        final Dialog dialog;
+        dialog = new Dialog(this, R.style.CustomDialog); //this is a reference to the style above
+        dialog.setContentView(R.layout.identify_callout_content); //I saved the xml file above as yesnomessage.xml
+        dialog.setCancelable(true);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        final EditText fname= (EditText) dialog.findViewById(R.id.fname);
+        final TextView mHeading= (TextView) dialog.findViewById(R.id.text);
+        final EditText lname= (EditText) dialog.findViewById(R.id.lname);
+        final Button mAddRecord= (Button) dialog.findViewById(R.id.button);
+        final Button mcancel= (Button) dialog.findViewById(R.id.buttoncancel);
+ //       mTempData = new GetSetData(
+//                                fname.getText().toString(),
+//                                lname.getText().toString(),
+//                                contact.getText().toString(),
+//                                email.getText().toString(),
+//                                bgroup.getText().toString(),
+//                                mCategory,
+//                                mLocation,
+//                                Double.toString(10));
 
+        mAddRecord.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(fname.getText().toString().trim().isEmpty())
+                    Toast.makeText(MainDashboard.this, "Please Fill Required Field", Toast.LENGTH_SHORT).show();
+                else{
+                   // GetSetData tempdate=new GetSetData("",fname.getText().toString().trim(), )
+                }
+
+            }
+        });
+
+        mcancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.cancel();
+            }
+        });
+        dialog.show();
+
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -91,7 +167,11 @@ public class MainDashboard extends AppCompatActivity implements TopicsRecordFrag
 
     @Override
     public void onListFragmentInteraction(GetSetData item) {
-        Toast.makeText(MainDashboard.this, item.getmFirstName(), Toast.LENGTH_SHORT).show();
+        if(mViewPager.getCurrentItem()==1)
+            Toast.makeText(MainDashboard.this, item.getmFirstName(), Toast.LENGTH_SHORT).show();
+        else
+            Toast.makeText(MainDashboard.this, item.getmFirstName(), Toast.LENGTH_SHORT).show();
+
     }
 
     /**
@@ -143,14 +223,11 @@ public class MainDashboard extends AppCompatActivity implements TopicsRecordFrag
             // Return a PlaceholderFragment (defined as a static inner class below).
             switch (position){
                 case 0:
-
-
-                    break;
+                    return new DoctorRecordFragment();
                 case 1:
-                    return new TopicsRecordFragment();
+                    return new DoctorRecordFragment();
                 case 2:
-
-                    break;
+                    return new TopicsRecordFragment();
 
                 default:
                     break;
@@ -172,7 +249,7 @@ public class MainDashboard extends AppCompatActivity implements TopicsRecordFrag
                 case 1:
                     return "Doctors";
                 case 2:
-                    return "Topics";
+                    return "Suggested Topics";
             }
             return null;
         }

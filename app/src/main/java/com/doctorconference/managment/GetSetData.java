@@ -1,12 +1,46 @@
 package com.doctorconference.managment;
 
-class GetSetData {
+public class GetSetData {
     private String mLastName;
     private String mEmail;
     private String mPwD;
     private String mFirstName;
     private String mAdmin;
     private String mRecodeID;
+    private String mTopicD;
+    private String mTopicTitle;
+    private String mTopicDetails;
+
+
+    public String getmTopicD() {
+        return mTopicD;
+    }
+
+    public void setmTopicD(String mTopicD) {
+        this.mTopicD = mTopicD;
+    }
+
+    public String getmTopicTitle() {
+        return mTopicTitle;
+    }
+
+    public void setmTopicTitle(String mTopicTitle) {
+        this.mTopicTitle = mTopicTitle;
+    }
+
+    public String getmTopicDetails() {
+        return mTopicDetails;
+    }
+
+    public void setmTopicDetails(String mTopicDetails) {
+        this.mTopicDetails = mTopicDetails;
+    }
+
+    public GetSetData(String mTopicD, String mTopicTitle, String mTopicDetails) {
+        this.mTopicD = mTopicD;
+        this.mTopicTitle = mTopicTitle;
+        this.mTopicDetails = mTopicDetails;
+    }
 
     public GetSetData() {
     }
