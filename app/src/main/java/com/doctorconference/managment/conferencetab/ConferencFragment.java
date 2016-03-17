@@ -26,12 +26,13 @@ import java.util.List;
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
-public class ConferencFragment extends Fragment {
+public class ConferencFragment extends Fragment  {
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
     private int mColumnCount = 1;
+    private ConferenceRVAdapter mAdapter;
     private OnListFragmentInteractionListener mListener;
     List<GetSetData> mConfrenceRecord = new ArrayList<>();
 
@@ -76,8 +77,9 @@ public class ConferencFragment extends Fragment {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
             GetAllConfrences();
+            mAdapter=new ConferenceRVAdapter(mConfrenceRecord,mListener);
 
-           recyclerView.setAdapter(new ConferenceRVAdapter(mConfrenceRecord, mListener));
+           recyclerView.setAdapter(mAdapter);
         }
         return view;
     }
@@ -106,6 +108,9 @@ public class ConferencFragment extends Fragment {
         mListener = null;
     }
 
+
+
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -120,4 +125,5 @@ public class ConferencFragment extends Fragment {
         // TODO: Update argument type and name
         void onListFragmentInteraction(GetSetData item);
     }
+
 }

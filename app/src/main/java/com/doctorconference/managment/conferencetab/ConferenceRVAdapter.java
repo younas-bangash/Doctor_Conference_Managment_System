@@ -35,20 +35,22 @@ public class ConferenceRVAdapter extends RecyclerView.Adapter<ConferenceRVAdapte
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        /*holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
-        holder.mContentView.setText(mValues.get(position).content);
-
-        holder.mView.setOnClickListener(new View.OnClickListener() {
+        holder.mItem = mValues.get(position);
+        holder.mIdView.setText(mValues.get(position).getmTopicDetails());
+        holder.mContentView.setText(mValues.get(position).getmTopicTitle());
+        holder.mView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
-            public void onClick(View v) {
+            public boolean onLongClick(View v) {
                 if (null != mListener) {
                     // Notify the active callbacks interface (the activity, if the
                     // fragment is attached to one) that an item has been selected.
                     mListener.onListFragmentInteraction(holder.mItem);
                 }
+                return true;
             }
-        });*/
+        });
+
+
     }
 
     @Override
@@ -65,8 +67,8 @@ public class ConferenceRVAdapter extends RecyclerView.Adapter<ConferenceRVAdapte
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mIdView = (TextView) view.findViewById(R.id.id);
-            mContentView = (TextView) view.findViewById(R.id.content);
+            mIdView = (TextView) view.findViewById(R.id.content);
+            mContentView = (TextView) view.findViewById(R.id.details);
         }
 
         @Override

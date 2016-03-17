@@ -12,7 +12,7 @@ import java.util.List;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
     // Database Version
-    private static final int DATABASE_VERSION = 23;
+    private static final int DATABASE_VERSION = 26;
     // Database Name
     private static final String DATABASE_NAME = "DoctorManagmentDB";
     // Contacts table name
@@ -32,7 +32,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     private static final String KEY_CONFICID    = "conf_id";
     private static final String KEY_CONF_TITTLE = "conf_title";
-    private static final String KEY_CONF_DETAILS = "conf_date";
+    private static final String KEY_CONF_DATE = "conf_date";
 
     public DatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -58,7 +58,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         String CREATE_CONF_TABLE = "CREATE TABLE " + TABLE_NAME_CONF + "("
                 + KEY_CONFICID + " INTEGER PRIMARY KEY,"
                 + KEY_CONF_TITTLE + " TEXT,"
-                + KEY_CONF_DETAILS + " TEXT" + ")";
+                + KEY_CONF_DATE + " TEXT" + ")";
         db.execSQL(CREATE_CONTACTS_TABLE);
         db.execSQL(CREATE_TOPIC_TABLE);
         db.execSQL(CREATE_CONF_TABLE);
@@ -104,7 +104,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(KEY_CONF_TITTLE, contact.getmTopicTitle());
-        values.put(KEY_CONF_DETAILS, contact.getmTopicDetails());
+        values.put(KEY_CONF_DATE, contact.getmTopicDetails());
         // Inserting Row
         db.insert(TABLE_NAME_CONF, null, values);
         db.close(); // Closing database connection
@@ -116,7 +116,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         // Select All Query
         String selectQuery;
         if(allconf)
-            selectQuery = "SELECT  * FROM " + TABLE_NAME_CONF +" order by "+KEY_CONFICID+" DESC";
+            selectQuery = "SELECT  * FROM " + TABLE_NAME_CONF +" order by "+ KEY_CONFICID +" DESC";
         else
             selectQuery = "SELECT  * FROM " + TABLE_NAME_CONF +" where "+ KEY_CONFICID +"='"+conficid+"'";
         SQLiteDatabase db = this.getWritableDatabase();
@@ -135,6 +135,24 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return contactList;
     }
 
+    // Updating single contact
+    public int updateContact(GetSetData contact) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(KEY_CONF_TITTLE, contact.getmTopicTitle());
+        values.put(KEY_CONF_DATE, contact.getmTopicDetails());
+        // updating row
+        return db.update(TABLE_NAME_CONF, values, KEY_CONFICID + " = ?",
+                new String[] { String.valueOf(contact.getmTopicD()) });
+    }
+
+    // Deleting single contact
+    public void deleteContact(GetSetData contact) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_NAME_CONF, KEY_CONFICID + " = ?",
+                new String[] { String.valueOf(contact.getmTopicD()) });
+        db.close();
+    }
 
     // Getting All Topics
     public List<GetSetData> GetTopics(String topicid,boolean alltopics) {
