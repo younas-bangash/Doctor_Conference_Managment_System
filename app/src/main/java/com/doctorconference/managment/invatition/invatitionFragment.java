@@ -1,4 +1,4 @@
-package com.doctorconference.managment.conferencetab;
+package com.doctorconference.managment.invatition;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -10,15 +10,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.doctorconference.managment.DatabaseHandler;
 import com.doctorconference.managment.GetSetData;
-import com.doctorconference.managment.MainDashboardAdmin;
 import com.doctorconference.managment.R;
 import com.doctorconference.managment.Utils;
 
-import java.util.ArrayList;
 import java.util.List;
-
 
 /**
  * A fragment representing a list of Items.
@@ -26,27 +22,25 @@ import java.util.List;
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
-public class ConferencFragment extends Fragment  {
+public class invatitionFragment extends Fragment {
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
     private int mColumnCount = 1;
-    private ConferenceRVAdapter mAdapter;
     private OnListFragmentInteractionListener mListener;
-    List<GetSetData> mConfrenceRecord = new ArrayList<>();
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public ConferencFragment() {
+    public invatitionFragment() {
     }
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
-    public static ConferencFragment newInstance(int columnCount) {
-        ConferencFragment fragment = new ConferencFragment();
+    public static invatitionFragment newInstance(int columnCount) {
+        invatitionFragment fragment = new invatitionFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
         fragment.setArguments(args);
@@ -56,16 +50,16 @@ public class ConferencFragment extends Fragment  {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        MainDashboardAdmin.fab.setVisibility(View.GONE);
+
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_item_list_conference, container, false);
-
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_invatition_list, container, false);
 
         // Set the adapter
         if (view instanceof RecyclerView) {
@@ -76,18 +70,11 @@ public class ConferencFragment extends Fragment  {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            GetAllConfrences();
-            mAdapter=new ConferenceRVAdapter(mConfrenceRecord,mListener);
+            List<GetSetData> mInvations= Utils.db.GetInvatition(Utils.mUserID);
 
-           recyclerView.setAdapter(mAdapter);
+            recyclerView.setAdapter(new InvatitionRVAdapter(mInvations, mListener));
         }
         return view;
-    }
-
-    private void GetAllConfrences() {
-        Utils.db = new DatabaseHandler(getActivity());
-        mConfrenceRecord = Utils.db.GetConfrences("", true);//fetch all doctore record
-
     }
 
 
@@ -108,9 +95,6 @@ public class ConferencFragment extends Fragment  {
         mListener = null;
     }
 
-
-
-
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -125,5 +109,4 @@ public class ConferencFragment extends Fragment  {
         // TODO: Update argument type and name
         void onListFragmentInteraction(GetSetData item);
     }
-
 }

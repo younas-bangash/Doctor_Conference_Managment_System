@@ -10,6 +10,7 @@ public class GetSetData {
     private String mTopicD;
     private String mTopicTitle;
     private String mTopicDetails;
+    private String mDoctID;
 
 
     public String getmTopicD() {
@@ -52,6 +53,21 @@ public class GetSetData {
         this.mEmail = mEmail;
         this.mPwD = mpwd;
         this.mAdmin = madmin;
+    }
+
+    public GetSetData(String mConfrenceID, String mDoctoreID, String mTitle,String mDate) {
+        this.mTopicTitle=mTitle;
+        this.mTopicDetails=mDate;
+        this.mTopicD = mConfrenceID;
+        this.mDoctID = mDoctoreID;
+    }
+
+    public void setmDoctID(String mDoctID) {
+        this.mDoctID = mDoctID;
+    }
+
+    public String getmDoctID() {
+        return mDoctID;
     }
 
     public void setmRecodeID(String mRecodeID) {

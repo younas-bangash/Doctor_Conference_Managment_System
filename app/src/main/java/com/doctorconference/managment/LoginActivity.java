@@ -55,9 +55,15 @@ public class LoginActivity extends AppCompatActivity {
             Utils.mFirstName=Utils.sharedpreferences.getString("UserFirstName","FirstName");
             Utils.mLastName=Utils.sharedpreferences.getString("UserLastName","LastName");
             Utils.mAdmin=Utils.sharedpreferences.getString("UserAdmin","UserAdmin");
-            Intent dasboard=new Intent(LoginActivity.this,MainDashboard.class);
-            startActivity(dasboard);
-            finish();
+            if(Utils.mAdmin.equals("1")) {
+                Intent dasboard = new Intent(LoginActivity.this, MainDashboardAdmin.class);
+                startActivity(dasboard);
+                finish();
+            }else{
+                Intent dasboard = new Intent(LoginActivity.this, MainDashboard.class);
+                startActivity(dasboard);
+                finish();
+            }
         }else {
             //InsetSomeRecord();
             mEmailView = (EditText) findViewById(R.id.email);
@@ -235,9 +241,15 @@ public class LoginActivity extends AppCompatActivity {
                 Utils.mFirstName=mUserDetails.get(0).getmFirstName();
                 Utils.mLastName=mUserDetails.get(0).getmLastName();
                 Utils.mUserID=mUserDetails.get(0).getmRecodeID();
-                Intent dashboard=new Intent(LoginActivity.this,MainDashboard.class);
-                startActivity(dashboard);
-                finish();
+                if(Utils.mAdmin.equals("1")) {
+                    Intent dasboard = new Intent(LoginActivity.this, MainDashboardAdmin.class);
+                    startActivity(dasboard);
+                    finish();
+                }else{
+                    Intent dasboard = new Intent(LoginActivity.this, MainDashboard.class);
+                    startActivity(dasboard);
+                    finish();
+                }
             } else {
                 Toast.makeText(LoginActivity.this, "Invalid Login Credentials", Toast.LENGTH_SHORT).show();
             }

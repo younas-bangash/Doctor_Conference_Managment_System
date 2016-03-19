@@ -12,13 +12,15 @@ import java.util.List;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
     // Database Version
-    private static final int DATABASE_VERSION = 26;
+    private static final int DATABASE_VERSION = 29;
     // Database Name
     private static final String DATABASE_NAME = "DoctorManagmentDB";
     // Contacts table name
     private static final String TABLE_NAME = "user_registration";
     private static final String TABLE_NAME_TOPICS = "topics";
     private static final String TABLE_NAME_CONF = "conferences";
+    private static final String TABLE_NAME_INVIT = "invitation";
+
     // Contacts Table Columns names
     private static final String KEY_ID    = "user_id";
     private static final String KEY_FNAME = "fname";
@@ -33,6 +35,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String KEY_CONFICID    = "conf_id";
     private static final String KEY_CONF_TITTLE = "conf_title";
     private static final String KEY_CONF_DATE = "conf_date";
+
+    private static final String KEY_INVIT_ID    = "invit_id";
+    private static final String KEY_DOCT_ID = "doct_id";
+
 
     public DatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -59,9 +65,20 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + KEY_CONFICID + " INTEGER PRIMARY KEY,"
                 + KEY_CONF_TITTLE + " TEXT,"
                 + KEY_CONF_DATE + " TEXT" + ")";
+
+        //create table for invitation
+        String CREATE_CONF_INVIT = "CREATE TABLE " + TABLE_NAME_INVIT + "("
+                + KEY_INVIT_ID + " INTEGER PRIMARY KEY,"
+                + KEY_TOPIC_TITTLE + " TEXT,"
+                + KEY_DOCT_ID + " TEXT,"
+                + KEY_CONFICID + " TEXT,"
+                + KEY_TOPIC_DETAILS + " TEXT" + ")";
+
+
         db.execSQL(CREATE_CONTACTS_TABLE);
         db.execSQL(CREATE_TOPIC_TABLE);
         db.execSQL(CREATE_CONF_TABLE);
+        db.execSQL(CREATE_CONF_INVIT);
     }
 
     // Upgrading database
@@ -71,6 +88,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_TOPICS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_CONF);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_INVIT);
         // Create tables again
         onCreate(db);
 
@@ -96,6 +114,20 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(KEY_TOPIC_DETAILS, contact.getmTopicDetails());
         // Inserting Row
         db.insert(TABLE_NAME_TOPICS, null, values);
+        db.close(); // Closing database connection
+    }
+
+    // Adding new contact
+    void addInvit(GetSetData contact) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(KEY_TOPIC_TITTLE, contact.getmTopicTitle());
+        values.put(KEY_TOPIC_DETAILS, contact.getmTopicDetails());
+        values.put(KEY_DOCT_ID, contact.getmDoctID());
+        values.put(KEY_CONFICID, contact.getmTopicD());
+        // Inserting Row
+        db.insert(TABLE_NAME_INVIT, null, values);
         db.close(); // Closing database connection
     }
 
@@ -152,6 +184,37 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.delete(TABLE_NAME_CONF, KEY_CONFICID + " = ?",
                 new String[] { String.valueOf(contact.getmTopicD()) });
         db.close();
+    }
+
+
+    // Deleting single contact
+    public void deleteInvit(GetSetData contact) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_NAME_INVIT, KEY_INVIT_ID+ " = ?",
+                new String[] { String.valueOf(contact.getmTopicD()) });
+        db.close();
+    }
+
+    // Getting All Topics
+    public List<GetSetData> GetInvatition(String topicid) {
+        List<GetSetData> contactList = new ArrayList<>();
+        // Select All Query
+        String selectQuery;
+            selectQuery = "SELECT  * FROM " + TABLE_NAME_INVIT +" where "+ KEY_DOCT_ID +"='"+topicid+"'";
+        SQLiteDatabase db = this.getWritableDatabase();
+        @SuppressLint("Recycle") Cursor cursor = db.rawQuery(selectQuery, null);
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                GetSetData contact = new GetSetData();
+                contact.setmTopicD(""+Integer.parseInt(cursor.getString(0)));
+                contact.setmTopicTitle(cursor.getString(1));
+                contact.setmTopicDetails(cursor.getString(2));
+                contactList.add(contact);
+            } while (cursor.moveToNext());
+        }
+
+        return contactList;
     }
 
     // Getting All Topics
